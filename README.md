@@ -68,14 +68,14 @@ EXAMPLE: 	MERCER SOCCER
 
 To encode, build a Huffman Tree, here is an example:  
 T7  
-/       \  
-T5            T6  
-/ \          /    \  
-E   R      T3          T4  
-/  \        /  \  
-S    T1     T2    C  
- / \    / \  
-nl sp   M  O  
+/ \  
+T5 T6  
+/ \ / \  
+E R T3 T4  
+___/ \_ / \  
+___S T1 T2 C  
+____/ \ / \  
+___nl sp M O  
 Notice: 
 	the smallest frequency characters are at the bottom
 	all internal nodes are non-characters: only fillers
