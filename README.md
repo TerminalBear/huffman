@@ -75,7 +75,7 @@ To encode, build a Huffman Tree, here is an example:
            /  \        /  \  
           S    T1     T2    C  
               / \    / \  
-	     nl sp   M  O  
+	     __nl sp   M  O  
 Notice: 
 	the smallest frequency characters are at the bottom
 	all internal nodes are non-characters: only fillers
