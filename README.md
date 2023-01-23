@@ -74,7 +74,7 @@ To encode, build a Huffman Tree, here is an example:
  E   R      T3          T4  
            /  \        /  \  
           S    T1     T2    C  
-              / \    / \  
+             __ / \    / \  
 	     __nl sp   M  O  
 Notice: 
 	the smallest frequency characters are at the bottom
