@@ -91,4 +91,5 @@ The encoded characters following are respectively:
 111-> 1101->	O;
 114-> 01->		R;
 115-> 100->		S;
+(The notation is ASCII value-> encoded value-> character.)
  
