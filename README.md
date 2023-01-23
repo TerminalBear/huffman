@@ -31,7 +31,6 @@ heap. From these two values, create an internal node of type struct
 with a frequency of the sum of the two frequencies. The two extracted
 nodes will be the left and right children of the new node. Repeat
 this step until only one node remains which will now be the root.
-In the case that two nodes have identical frequencies, _______.(?)
 
 Once the huffman tree is built, a file of characters can be converted
 into a string of 1s and 0s and is now compressed. This file can be
@@ -51,14 +50,7 @@ file format
 			>string binary representation of char
 		>output line:
 			>the compressed file output in binary
-		i.e. zipped file
-			2
-			33	1	// !
-			32	0	// _
-			10111
-	 	     unzipped 
-			!_!!!
-
+		
 Important operations: Huffman class
 	insert: inserts a char and it's frequency into Huffman Tree
 	inTree: true/false indicating whether char is store in tree
