@@ -83,12 +83,12 @@ Notice:
 The header line above will work like the previous example.
 The number of unique characters in MERCER SOCCER = 8.
 The encoded characters following are respectively:
-10->1010->		nl 
-32-> 1011->		sp
-99-> 111->		C
-101-> 00->		E
-109-> 1100->	M
-111-> 1101->	O
-114-> 01->		R
-115-> 100->		S
+10->1010->		nl ;
+32-> 1011->		sp;
+99-> 111->		C;
+101-> 00->		E;
+109-> 1100->	M;
+111-> 1101->	O;
+114-> 01->		R;
+115-> 100->		S;
  
