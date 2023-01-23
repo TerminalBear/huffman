@@ -72,10 +72,10 @@ T7
 T5            T6  
 / \          /    \  
 E   R      T3          T4  
-__/  \        /  \  
-__S    T1     T2    C  
-__ / \    / \  
-__nl sp   M  O  
+/  \        /  \  
+S    T1     T2    C  
+ / \    / \  
+nl sp   M  O  
 Notice: 
 	the smallest frequency characters are at the bottom
 	all internal nodes are non-characters: only fillers
