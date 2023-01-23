@@ -1,0 +1,313 @@
+$ cat -n zi p.cpp 
+     1	#include <iostream>
+     2	#include <fstream>
+     3	#include <cctype>
+     4	#include <stdlib.h>
+     5	#include "huffman.cpp"
+     6	
+     7	using namespace std;
+     8	void loadLetters (const int Letters[], HuffmanTree &tree, int &x, int &bits1);
+     9	
+    10	
+    11	const int NumLetters = 256;
+    12	
+    13	int main(int argc, char *argv[])
+    14	{
+    15		//////////////////////////////////////////////////////////////////////////////////		OPEN FILE and BUILD TREE
+    16		HuffmanTree tree;				// data structure declaration
+    17		int header = 0, bits1 = 0, bits = 0;		// first line of output file, char count
+    18		ifstream ifs;					// input file
+    19		string file, line;				// file name and encoded string
+    20		int Letters[NumLetters];			// freq of chars array
+    21	
+    22		if(argc != 2){
+    23			cout<<"ZIP: Invalid format\nTry `ZIP --help' for more information."<<endl;
+    24			return 0;
+    25		}
+    26		else{
+    27			file = argv[1];
+    28			ifs.open(file.c_str(), ios:: in);
+    29			if(!ifs.is_open()){
+    30				cout<<"ZIP: File "<<file<<" is not a valid file"<<endl;
+    31				return 0;
+    32			}
+    33			char ch;
+    34	        for (char ch = char(0);  ch <= char(126);  ch++)
+    35	                Letters[ch] = 0;
+    36	
+    37	        while (ifs)
+    38	        {
+    39	        	ifs.get(ch);
+    40			line += ch;
+    41	                Letters[ch] += 1;
+    42	        }   
+    43			ifs.close();			
+    44		}
+    45		loadLetters(Letters, tree, header, bits1);
+    46		tree.build();	
+    47		if(true)
+    48			tree.PrintTable();
+    49		
+    50		/////////////////////////////////////////////////////////////////////////////////////		OUTPUT FILE
+    51		ofstream ofs;
+    52		file+=".zip";
+    53		ofs.open(file.c_str(), ios:: out);
+    54		ofs<<header<<endl;							//outputs # unique chars
+    55	        
+    56		for (char ch = char(0);  ch <= char(126);  ch++){			//outputs char ASCII and code
+    57				int output = (int) ch;
+    58			if(Letters[ch]!=0){
+    59	        		if (ch != '\n'&& ch != ' '){
+    60					ofs << output <<"\t"<<tree.GetCode(ch)<<endl;
+    61				}
+    62				else if (ch == '\n'){
+    63					ofs << output <<"\t"<<tree.GetCode('/')<<endl;
+    64				}
+    65				else if (ch == ' '){	
+    66					ofs << output <<"\t"<<tree.GetCode('_')<<endl;
+    67				}
+    68			}
+    69		}
+    70		
+    71		for(int i = 0; i<line.size(); i++){
+    72			bits++;	
+    73			if(line[i]==' ')
+    74				ofs<<tree.GetCode('_');
+    75			else if(line[i]=='\n')
+    76				ofs<<tree.GetCode('/');
+    77			else	
+    78				ofs<<tree.GetCode(line[i]);
+    79		}
+    80		
+    81		ofs.close();
+    82		double val = bits1*8;
+    83		val =(double) bits/val;
+    84		double ratio =(1.0-val)*100.0;
+    85		cout<<"File Succesfully Compressed to "<<bits<<" Bits("<<abs(ratio)<<" % Less)"<<endl;
+    86	
+    87		 
+    88	    return 0;
+    89	}
+    90	
+    91	
+    92	void loadLetters (const int Letters[], HuffmanTree &tree, int &x, int &bits1)
+    93	{
+    94	        for (char ch = char(0);  ch <= char(126);  ch++)
+    95	          if ((Letters[ch] != 0) && (ch != '\n') && (ch != ' ')){
+    96			tree.insert(ch, Letters[ch]);	
+    97			x++;
+    98			bits1++;
+    99		}
+   100	          else if ((Letters[ch] != 0) && (ch == '\n')){
+   101			tree.insert('/', Letters[ch]);	
+   102			x++;
+   103			bits1++;
+   104		}
+   105	          else if ((Letters[ch] != 0) && (ch == ' ')){
+   106			tree.insert('_', Letters[ch]);
+   107			x++;
+   108			bits1++;
+   109		}
+   110	}
+   111	
+$ cat hufm[Kfm an.h
+#include <vector>
+#include <string>
+using namespace std;
+
+struct HNode {
+    char ch;
+    int weight;
+    int parent;
+    int childType;
+};
+
+class HuffmanTree {
+    public:
+	HuffmanTree();				// constructor
+
+	void insert(char ch, int weight);	// inserts a character and its associated weight
+						// into a node of the Huffman tree
+
+	bool inTree(char ch);			// returns a boolean value indicating whether
+						// a given character is stored in the tree
+		
+	int GetFrequency(char ch);		// returns the weight of a given character
+
+	
+	void build();				// Builds the Huffman Tree;
+	
+
+	string GetCode(char ch);		// returns the compressed code of a given
+						// character in the tree using recursion
+
+	void PrintTable();			// displays the Huffman encoding table used in
+						// the compression process
+	
+	int numNodes();				// returns the number of nodes currently in Huffman 
+						// tree
+
+    private:
+	vector<HNode> nodes;
+	int numChars;
+	bool built;                             
+	
+	int lookUp(char ch);			// returns the index of a given character in tree
+	int GetFrequency(int i);		// returns the weight at a given index
+	string GetCode(int i);			// returns the compressed code of the character at 
+						// a given index
+};
+$ cat huf fman.cpp 
+#include "huffman.h"
+#include <iostream>
+using namespace std;
+
+HuffmanTree:: HuffmanTree()
+	: numChars(0), built(false) {}
+
+void HuffmanTree:: insert(char ch, int weight) {
+    HNode newNode = {ch, weight, -1, -1}; 
+    built = false;
+    nodes.push_back(newNode);
+    numChars++;
+
+}
+
+bool HuffmanTree:: inTree(char ch) {
+	if(ch == lookUp(ch))
+		return true;
+	return false;
+}
+
+int HuffmanTree:: GetFrequency(char ch) {
+	int x = (int) ch;
+	return GetFrequency(x);
+}
+
+int HuffmanTree:: GetFrequency(int i) {
+	return nodes[i].weight;
+}
+
+int HuffmanTree:: lookUp(char ch) {
+	for(int i=0; i<numChars; i++){
+		if(nodes[i].ch == ch)
+			return i;
+	}	
+	return -1;
+}
+
+string HuffmanTree:: GetCode(char ch) {
+	return GetCode(lookUp(ch));
+}
+
+
+string HuffmanTree:: GetCode(int i) {
+	if(nodes[i].parent== 0)
+		return "";
+	else{
+		return (GetCode(nodes[i].parent)+(char)(nodes[i].childType+'0'));
+	}
+}
+
+void HuffmanTree:: PrintTable() {
+	cout<<"\t## ENCODING TABLE FOR ZIP FILE ##\n\n\tIndex\tChar\tWeight\tParent\tChildType"<<endl;
+	int counter = 1;
+	for(int i =0; i< numChars; i++){
+		if(nodes[i].ch!='*'&&nodes[i].ch!='\0')
+			cout<<"\t"<<i<<"\t"<<nodes[i].ch<<"\t"<<nodes[i].weight<<"\t"<<nodes[i].parent<<"\t"<<nodes[i].childType<<endl;
+		else if(nodes[i].ch=='\0'&&nodes[i].childType!=-1){
+			cout<<"\t"<<i<<"\t"<<"T"<<counter<<"\t"<<nodes[i].weight<<"\t"<<nodes[i].parent<<"\t"<<nodes[i].childType<<endl;
+			counter++;
+		}
+		else{
+			cout<<"\t"<<i<<"\t"<<"T"<<counter<<"\t"<<nodes[i].weight<<"\t"<<nodes[i].parent<<"\t"<<"N/A"<<endl;
+			counter++;
+		}
+	}
+}
+
+int HuffmanTree:: numNodes() {
+	return numChars;
+}
+
+void HuffmanTree:: build() {
+	int ASCII = 256;
+	int min, leaf, leaf1;
+	int run = numChars*2-1;
+	while(run>numChars){
+		min = ASCII;
+		for(int i = 0; i<numChars; i++){
+			if(nodes[i].parent==-1){
+				if(nodes[i].weight<min){
+					leaf=i;
+					min = nodes[i].weight;
+				}
+			}
+		}	
+		min=ASCII;
+		for(int i = 0; i<numChars; i++){
+			if(nodes[i].parent==-1){
+				if(nodes[i].weight<min && i!=leaf){
+					leaf1=i;
+					min = nodes[i].weight;
+				}	
+			}		
+		} 
+		int val = nodes[leaf].weight + nodes[leaf1].weight;
+		insert('\0', val);
+		nodes[leaf].parent = nodes.size()-1;
+		nodes[leaf1].parent = nodes.size()-1;
+		nodes[leaf].childType = 0;
+		nodes[leaf1].childType = 1;
+	}
+	nodes[nodes.size()-1].parent=0;
+	built = true;	
+}
+
+
+$ c++ zi p.cpp hufm[Kfman.o
+c++: error: huffman.o: No such file or directory
+$ c++ zip.cpp huffman.o[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K[K         c++ z ip.cpp 
+$ mv a.out myZip
+$ c++ unz ip.cpp 
+$ mv a.out myUNz [K[K[KUnz ip.cpp
+$ ./m y Zip sample4
+	## ENCODING TABLE FOR ZIP FILE ##
+
+	Index	Char	Weight	Parent	ChildType
+	0	/	2	10	0
+	1	_	1	8	0
+	2	c	3	11	1
+	3	e	3	12	0
+	4	m	1	8	1
+	5	o	1	9	0
+	6	r	3	12	1
+	7	s	1	9	1
+	8	T1	2	10	1
+	9	T2	2	11	0
+	10	T3	4	13	0
+	11	T4	5	13	1
+	12	T5	6	14	0
+	13	T6	9	14	1
+	14	T7	15	0	N/A
+File Succesfully Compressed to 15 Bits(76 % Less)
+$ ./unzip.out [K[K[K[K[K[K[K[K[K[KmyUnzip.cpp 
+Error. -- Now Aborting.
+$ ./myUnzip.cpp sam ple4.zip 
+File Successfully Inflated Back To Original.
+$ cat sam ple4
+mercer soccer
+
+$ cat sam ple4.zip 
+8
+10	100
+32	1010
+99	111
+101	00
+109	1011
+111	1100
+114	01
+115	1101
+1011000111100011010110111001111110001100100
+$ exit
+exit
