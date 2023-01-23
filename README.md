@@ -74,16 +74,7 @@ Important operations: Huffman class
 
 EXAMPLE: 	MERCER SOCCER
 
-To encode, build Huffman Tree as follows:
-          T7
-       /       \
-   T5            T6
-  / \          /    \
- E   R      T3          T4
-           /  \        /  \
-          S    T1     T2    C
-              / \    / \
-	           nl sp   M  O
+To encode, build a Huffman Tree.
 Notice: 
 	the smallest frequency characters are at the bottom
 	all internal nodes are non-characters: only fillers
@@ -92,7 +83,10 @@ Notice:
 For each character, going to the right = 1, left = 0.
 Using a recursive function, an output string can be read to the
 output file compressed line to give an encoded result.
-MERCER SOCCER = 1100000111100011011100110111111100011010
+example: MERCER SOCCER = 1100000111100011011100110111111100011010
+Notice:
+	Not every encoding algorithm will be the same, so the
+	results won't be idential either.
 
 The header line above will work like the previous example.
 The number of unique characters in MERCER SOCCER = 8.
