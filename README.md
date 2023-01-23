@@ -67,15 +67,15 @@ Important operations: Huffman class
 EXAMPLE: 	MERCER SOCCER
 
 To encode, build a Huffman Tree, here is an example:  
-          T7  
-       /       \  
-   T5            T6  
-  / \          /    \  
- E   R      T3          T4  
-           /  \        /  \  
-          S    T1     T2    C  
-             __ / \    / \  
-	     __nl sp   M  O  
+T7  
+/       \  
+T5            T6  
+/ \          /    \  
+E   R      T3          T4  
+/  \        /  \  
+S    T1     T2    C  
+__ / \    / \  
+__nl sp   M  O  
 Notice: 
 	the smallest frequency characters are at the bottom
 	all internal nodes are non-characters: only fillers
