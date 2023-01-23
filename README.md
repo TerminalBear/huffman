@@ -72,8 +72,8 @@ T7
 T5            T6  
 / \          /    \  
 E   R      T3          T4  
-/  \        /  \  
-S    T1     T2    C  
+__/  \        /  \  
+__S    T1     T2    C  
 __ / \    / \  
 __nl sp   M  O  
 Notice: 
