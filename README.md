@@ -73,8 +73,8 @@ T5 T6
 / \ / \  
 E R T3 T4  
 ____/ \ / \  
-____S T1 T2 C  
-_____/ \ / \  
+___S T1 T2 C  
+_____/ \  / \  
 ____nl sp M O  
 Notice: 
 	the smallest frequency characters are at the bottom
